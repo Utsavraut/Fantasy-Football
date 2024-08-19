@@ -1,0 +1,316 @@
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Football Team Selection</title>
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('{{ url_for('static', filename='pitch.png') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .player {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            color: white;
+            font-weight: bold;
+            font-size: 0.75rem;
+            padding: 5px;
+            position: absolute;
+            transform: translate(-50%, -50%);
+        }
+
+        .goalkeeper { background-color: #facc15; }
+        .defender { background-color: #3b82f6; }
+        .midfielder { background-color: #22c55e; }
+        .forward { background-color: #ef4444; }
+
+        /* Positioning players on the pitch */
+        .gk { top: 85%; left: 50%; }
+        .def1 { top: 70%; left: 20%; }
+        .def2 { top: 70%; left: 40%; }
+        .def3 { top: 70%; left: 60%; }
+        .def4 { top: 70%; left: 80%; }
+        .mid1 { top: 55%; left: 20%; }
+        .mid2 { top: 55%; left: 40%; }
+        .mid3 { top: 55%; left: 60%; }
+        .mid4 { top: 55%; left: 80%; }
+        .fwd1 { top: 35%; left: 40%; }
+        .fwd2 { top: 35%; left: 60%; }
+
+        /* Positioning substitutes */
+        .substitute-wrapper {
+            position: absolute;
+            top: 12%;
+            left: 8%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .substitute {
+            margin-bottom: 10px;
+            width: 60px;
+            height: 60px;
+        }
+
+        .sub1 { top: 20%; }
+        .sub2 { top: 220%; }
+        .sub3 { top: 420%; }
+        .sub4 { top:620%; }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto px-4 py-8">
+        <h2 class="text-center text-lg font-bold mb-3 text-white">Substitutes</h2>
+
+        <div>
+            {% for player in best_xi %}
+                {% if loop.index == 1 %}
+                    <div class="player goalkeeper gk">
+                {% elif loop.index <= 5 %}
+                    <div class="player defender def{{ loop.index - 1 }}">
+                {% elif loop.index <= 9 %}
+                    <div class="player midfielder mid{{ loop.index - 5 }}">
+                {% else %}
+                    <div class="player forward fwd{{ loop.index - 9 }}">
+                {% endif %}
+                    {{ player['first_name'] }}<br>
+                    <small>{{ player['club_name'] }}</small>
+                </div>
+            {% endfor %}
+        </div>
+
+   
+        <div class="substitute-wrapper text-white">
+            <h3 class="text-lg font-semibold"></h3>
+            {% for player in top_15 if player not in best_xi %}
+                <div class="player substitute {{ player['position'] | lower }} sub{{ loop.index }}">
+                    {{ player['first_name'] }}<br>
+                    <small>{{ player['club_name'] }}</small>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html> 
+
+
+
+
+  -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Football Team Selection</title>
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
+    <!-- Add Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-image: url("{{ url_for('static', filename='pitch.png') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .player-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 100px;
+            /* Increased height to accommodate the cost */
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.75rem;
+            padding: 5px;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .goalkeeper {
+            background-color: #facc15;
+        }
+
+        .defender {
+            background-color: #3b82f6;
+        }
+
+        .midfielder {
+            background-color: #22c55e;
+        }
+
+        .forward {
+            background-color: #ef4444;
+        }
+
+        /* Positioning players on the pitch */
+        .gk {
+            top: 85%;
+            left: 50%;
+        }
+
+        .def1 {
+            top: 70%;
+            left: 20%;
+        }
+
+        .def2 {
+            top: 70%;
+            left: 40%;
+        }
+
+        .def3 {
+            top: 70%;
+            left: 60%;
+        }
+
+        .def4 {
+            top: 70%;
+            left: 80%;
+        }
+
+        .mid1 {
+            top: 50%;
+            left: 20%;
+        }
+
+        .mid2 {
+            top: 52%;
+            left: 40%;
+        }
+
+        .mid3 {
+            top: 52%;
+            left: 60%;
+        }
+
+        .mid4 {
+            top: 50%;
+            left: 80%;
+        }
+
+        .fwd1 {
+            top: 32%;
+            left: 40%;
+        }
+
+        .fwd2 {
+            top: 32%;
+            left: 60%;
+        }
+
+        /* Positioning substitutes */
+        .substitute-wrapper {
+            position: absolute;
+            top: 12%;
+            left: 2%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .substitute {
+            margin-bottom: 10px;
+            width: 80px;
+            height: 100px;
+            /* Increased height to accommodate the cost */
+            background-color: white;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .substitute.forward {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .substitute.midfielder {
+            background-color: #22c55e;
+            color: white;
+        }
+
+        .substitute.defender {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .substitute.goalkeeper {
+            background-color: #facc15;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mx-auto px-4 py-8">
+        <h2 class="text-center text-lg font-bold mb-3 text-white">Substitutes</h2>
+
+        <!-- Best XI Players on the pitch -->
+        <div>
+            {% for player in best_xi %}
+            {% if loop.index == 1 %}
+            <div class="player-card goalkeeper gk">
+                {% elif loop.index <= 5 %} <div class="player-card defender def{{ loop.index - 1 }}">
+                    {% elif loop.index <= 9 %} <div class="player-card midfielder mid{{ loop.index - 5 }}">
+                        {% else %}
+                        <div class="player-card forward fwd{{ loop.index - 9 }}">
+                            {% endif %}
+                            <i class="fas fa-user-alt mb-2 text-2xl"></i>
+                            £{{ player['cost'] }}m<br> <!-- Display player cost -->
+                            {{ player['first_name'] }}<br>
+                            <small>{{ player['club_name'] }}</small>
+                        </div>
+                        {% endfor %}
+            </div>
+
+            <!-- Substitutes (4 players) on the side -->
+            <div class="substitute-wrapper text-white">
+                {% for player in top_15 if player not in best_xi %}
+                {% if loop.index <= 4 %} <div class="substitute {{ player['position'] | lower }} sub{{ loop.index }}">
+                    <i class="fas fa-user-alt mb-2 text-2xl"></i>
+                    £{{ player['cost'] }}m<br> <!-- Display player cost -->
+                    {{ player['first_name'] }}<br>
+                    <small>{{ player['club_name'] }}</small>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</body>
+
+</html>
